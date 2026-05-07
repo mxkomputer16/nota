@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Nota Servis</title>
+    <style>
+        body { font-family: 'Courier New', monospace; width: 80mm; margin: 10px auto; }
+        .box { border: 1px solid #000; padding: 10px; }
+        .btn-print { display: block; width: 100%; padding: 10px; background: #007bff; color: #fff; text-align: center; text-decoration: none; margin-top: 10px; border-radius: 5px; }
+        @media print { .btn-print { display: none; } }
+    </style>
+</head>
+<body>
+    <div class="box">
+        <div id="konten-nota">Memuat data...</div>
+    </div>
+
+    <a href="javascript:window.print()" class="btn-print">CETAK PC</a>
+    <a id="btn-rawbt" href="#" class="btn-print" style="background: #333;">CETAK HP (RAWBT)</a>
+
+    <script>
+        // Mengambil data dari URL
+        const params = new URLSearchParams(window.location.search);
+        const id = params.get('id') || '-';
+        const nama = params.get('nama') || '-';
+        const barang = params.get('barang') || '-';
+
+        // Tampilan di Layar
+        document.getElementById('konten-nota').innerHTML = `
+            <center><strong>NOTA SERVIS</strong><br>ID: ${id}</center><br>
+            Nama  : ${nama}<br>
+            Unit  : ${barang}<br>
+            --------------------------
+        `;
+
+        // Setting untuk RawBT
+        const textRawBT = `      NOTA SERVIS\nID: ${id}\nNama: ${nama}\nUnit: ${barang}\n--------------------------`;
+        document.getElementById('btn-rawbt').href = "rawbt:base64," + btoa(textRawBT);
+    </script>
+</body>
+</html>
