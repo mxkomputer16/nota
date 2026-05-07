@@ -2,40 +2,68 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <title>Nota Servis</title>
+    <title>Nota Servis Online</title>
     <style>
-        body { font-family: 'Courier New', monospace; width: 80mm; margin: 10px auto; }
-        .box { border: 1px solid #000; padding: 10px; }
-        .btn-print { display: block; width: 100%; padding: 10px; background: #007bff; color: #fff; text-align: center; text-decoration: none; margin-top: 10px; border-radius: 5px; }
+        @page { size: A6; margin: 5mm; }
+        body { font-family: 'Courier New', monospace; width: 95mm; margin: 0 auto; }
+        .box { border: 1px solid #000; padding: 15px; min-height: 138mm; display: flex; flex-direction: column; }
+        .header { text-align: center; border-bottom: 2px solid #000; margin-bottom: 15px; }
+        table { width: 100%; font-size: 14px; }
+        .label { width: 35%; font-weight: bold; }
+        .separator { border-top: 1px dashed #000; margin: 15px 0; }
+        .footer { text-align: center; font-size: 12px; margin-top: auto; }
+        .btn-print { display: block; padding: 12px; background: #000; color: #fff; text-align: center; text-decoration: none; margin-top: 20px; }
         @media print { .btn-print { display: none; } }
     </style>
 </head>
 <body>
-    <div class="box">
-        <div id="konten-nota">Memuat data...</div>
+
+<div class="box">
+    <div class="header">
+        <h2>NOTA SERVIS</h2>
+        <small>Nomor: #<span id="val_id">-</span></small>
     </div>
 
-    <a href="javascript:window.print()" class="btn-print">CETAK PC</a>
-    <a id="btn-rawbt" href="#" class="btn-print" style="background: #333;">CETAK HP (RAWBT)</a>
+    <table>
+        <tr><td class="label">Tgl Masuk</td><td>: <span id="val_tgl">-</span></td></tr>
+        <tr><td class="label">Pelanggan</td><td>: <span id="val_nama">-</span></td></tr>
+        <tr><td class="label">Telepon</td><td>: <span id="val_telepon">-</span></td></tr>
+        <tr><td class="label">Unit</td><td>: <strong><span id="val_barang">-</span></strong></td></tr>
+    </table>
 
-    <script>
-        // Mengambil data dari URL
-        const params = new URLSearchParams(window.location.search);
-        const id = params.get('id') || '-';
-        const nama = params.get('nama') || '-';
-        const barang = params.get('barang') || '-';
+    <div class="separator"></div>
 
-        // Tampilan di Layar
-        document.getElementById('konten-nota').innerHTML = `
-            <center><strong>NOTA SERVIS</strong><br>ID: ${id}</center><br>
-            Nama  : ${nama}<br>
-            Unit  : ${barang}<br>
-            --------------------------
-        `;
+    <table>
+        <tr><td class="label">Kerusakan</td><td>: <span id="val_kerusakan">-</span></td></tr>
+        <tr><td class="label">Kelengkapan</td><td>: <span id="val_kelengkapan">-</span></td></tr>
+        <tr><td class="label">Status</td><td>: <span id="val_status">-</span></td></tr>
+    </table>
 
-        // Setting untuk RawBT
-        const textRawBT = `      NOTA SERVIS\nID: ${id}\nNama: ${nama}\nUnit: ${barang}\n--------------------------`;
-        document.getElementById('btn-rawbt').href = "rawbt:base64," + btoa(textRawBT);
-    </script>
+    <div class="footer">
+        Terima kasih atas kepercayaan Anda.<br>
+        <small id="print_date"></small>
+    </div>
+</div>
+
+<a href="javascript:window.print()" class="btn-print">CETAK NOTA</a>
+
+<script>
+    // Fungsi JavaScript untuk mengambil data dari URL (Pengganti $_GET PHP)
+    const params = new URLSearchParams(window.location.search);
+    
+    document.getElementById('val_id').innerText = params.get('id') || '-';
+    document.getElementById('val_tgl').innerText = params.get('tgl_masuk') || '-';
+    document.getElementById('val_nama').innerText = params.get('nama') || '-';
+    document.getElementById('val_telepon').innerText = params.get('telepon') || '-';
+    document.getElementById('val_barang').innerText = params.get('barang') || '-';
+    document.getElementById('val_kerusakan').innerText = params.get('kerusakan') || '-';
+    document.getElementById('val_kelengkapan').innerText = params.get('kelengkapan') || '-';
+    document.getElementById('val_status').innerText = params.get('status') || '-';
+    
+    // Set tanggal cetak otomatis
+    const sekarang = new Date();
+    document.getElementById('print_date').innerText = "Dicetak pada: " + sekarang.toLocaleString('id-ID');
+</script>
+
 </body>
 </html>
